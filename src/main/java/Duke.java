@@ -8,14 +8,18 @@ public class Duke {
         printOut(quit);
     }
 
-    // Prints the horizontal line divider.
+    /**
+     * Prints the horizontal line divider.
+     */
     public static void printDiv() {
         System.out.println("____________________________________________________________");
     }
 
-    // Prints each string in the array on a separate line with one space indentation.
-    // Ends the group of output with a horizontal line divider.
-    // Parameters: lines is an array of Strings to be printed on separate lines.
+    /**
+     * Prints each string in the array on a separate line with one space indentation.
+     * Ends the group of output with a horizontal line divider.
+     * @param lines Array of Strings to be printed on separate lines.
+     */
     public static void printOut(String[] lines) {
         for (String line : lines) {
             System.out.println(" " + line);
@@ -23,8 +27,10 @@ public class Duke {
         printDiv();
     }
 
-    // System.out.println(getLogo()) prints the logo.
-    // Returns a String that can be printed directly to print the logo.
+    /**
+     * System.out.println(getLogo()) prints the logo.
+     * @return String that can be printed directly to print the logo.
+     */
     public static String getLogo() {
         return (" ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
