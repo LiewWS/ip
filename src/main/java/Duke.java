@@ -1,6 +1,7 @@
 public class Duke {
     public static void main(String[] args) {
-        String[] greet = {"Hello! I'm Duke", "What can I do for you?"};
+        String logo = getLogo();
+        String[] greet = {logo, "Hello! I'm Duke", "What can I do for you?"};
         String[] quit = {"Bye. Hope to see you again soon!"};
 
         printDiv();
@@ -32,7 +33,7 @@ public class Duke {
      * @return String that can be printed directly to print the logo.
      */
     public static String getLogo() {
-        return (" ____        _        \n"
+        return ("____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
                 + "| |_| | |_| |   <  __/\n"
