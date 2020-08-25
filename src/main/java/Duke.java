@@ -3,6 +3,7 @@ import java.util.Scanner;
 public class Duke {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
+        DukeList dList = new DukeList();
         String[] greet = {getLogo(), "Hello! I'm Duke", "What can I do for you?"};
         String[] quit = {"Bye. Hope to see you again soon!"};
 
@@ -12,9 +13,13 @@ public class Duke {
             if (cmd.equals("bye")) {
                 break;
             }
+            else if (cmd.equals("list")) {
+                printOut(dList.listItems());
+            }
             else {
-                String[] lines = {cmd};
-                printOut(lines);
+                dList.addItem(cmd);
+                String[] status = {"added: " + cmd};
+                printOut(status);
             }
         }
         printOut(quit);
@@ -29,7 +34,7 @@ public class Duke {
 
     /**
      * Prints each string in the array on a separate line with one space indentation.
-     * Ends the group of output with a horizontal line divider.
+     * Starts and ends the group of output with a horizontal line divider.
      * @param lines Array of Strings to be printed on separate lines.
      */
     public static void printOut(String[] lines) {
