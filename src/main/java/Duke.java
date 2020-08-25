@@ -1,11 +1,22 @@
+import java.util.Scanner;
+
 public class Duke {
     public static void main(String[] args) {
-        String logo = getLogo();
-        String[] greet = {logo, "Hello! I'm Duke", "What can I do for you?"};
+        Scanner scan = new Scanner(System.in);
+        String[] greet = {getLogo(), "Hello! I'm Duke", "What can I do for you?"};
         String[] quit = {"Bye. Hope to see you again soon!"};
 
-        printDiv();
         printOut(greet);
+        while (true) {
+            String cmd = scan.nextLine();
+            if (cmd.equals("bye")) {
+                break;
+            }
+            else {
+                String[] lines = {cmd};
+                printOut(lines);
+            }
+        }
         printOut(quit);
     }
 
@@ -22,6 +33,7 @@ public class Duke {
      * @param lines Array of Strings to be printed on separate lines.
      */
     public static void printOut(String[] lines) {
+        printDiv();
         for (String line : lines) {
             System.out.println(" " + line);
         }
