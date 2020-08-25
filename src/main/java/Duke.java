@@ -14,7 +14,18 @@ public class Duke {
                 break;
             }
             else if (cmd.equals("list")) {
-                printOut(dList.listItems());
+                String[] list = dList.listItems();
+                if (list != null) {
+                    printOut(list);
+                }
+            }
+            else if (cmd.contains("done")) {
+                String[] arguments = cmd.split(" ");
+                String[] status = {"Nice! You have completed the following item: ",
+                        dList.markAsDone(Integer.valueOf(arguments[1]))};
+                if (status[1] != null) {
+                    printOut(status);
+                }
             }
             else {
                 dList.addItem(cmd);
