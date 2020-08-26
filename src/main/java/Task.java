@@ -10,10 +10,7 @@ public class Task {
         taskCount += 1;
     }
 
-    /**
-     * Record that the task is done.
-     */
-    public void completeTask() {
+    public void setIsDone() {
         this.isDone = true;
     }
 
@@ -21,11 +18,7 @@ public class Task {
         return this.name;
     }
 
-    /**
-     * Check if the task is done.
-     * @return true if task is done, otherwise false.
-     */
-    public boolean checkDone() {
+    public boolean getIsDone() {
         return this.isDone;
     }
 

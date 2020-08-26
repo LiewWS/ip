@@ -14,7 +14,7 @@ public class Duke {
                 break;
             }
             else if (cmd.equals("list")) {
-                String[] list = dList.listItems();
+                String[] list = dList.listTasks();
                 if (list != null) {
                     printOut(list);
                 }
@@ -28,7 +28,7 @@ public class Duke {
                 }
             }
             else {
-                dList.addItem(cmd);
+                dList.addTask(cmd);
                 String[] status = {"added: " + cmd};
                 printOut(status);
             }
