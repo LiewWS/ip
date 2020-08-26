@@ -1,14 +1,10 @@
 import java.util.ArrayList;
 
 public class DukeList {
-    private ArrayList<String> items;
-    private ArrayList<Boolean> isDone;
-    private int listSize;
+    private ArrayList<Task> tasks;
 
     public DukeList() {
-        this.items = new ArrayList();
-        this.isDone = new ArrayList();
-        listSize = 0;
+        this.tasks = new ArrayList();
     }
 
     /**
@@ -16,24 +12,26 @@ public class DukeList {
      * @param item String to be added to the list.
      */
     public void addItem(String item) {
-        this.items.add(item);
-        this.isDone.add(false);
-        ++(this.listSize);
+        Task task = new Task(item);
+        this.tasks.add(task);
     }
 
     /**
      * Creates an array of items in our list.
-     * Each element begins with the serial number which is 1 more than the item index
-     * Each list element of the array also has a status field.
+     * The first element is a string that serves as a header for the list.
+     * Each subsequent element begins with the serial number which is 1 more than the item index.
+     * Each subsequent element of the array also has a status field.
      * ✓ indicates that task is done and ✗ indicates that the task is not done.
-     * @return Array of Strings that enumerates the items in our list. Null if list empty
+     * @return Array of Strings that enumerates the items in our list. Null if list empty.
      */
     public String[] listItems() {
-        if (this.listSize > 0) {
-            String[] result = new String[this.listSize];
+        if (Task.getTaskCount() > 0) {
+            String[] result = new String[Task.getTaskCount() + 1];
 
-            for (int i = 0; i < this.listSize; ++i) {
-                result[i] = (i + 1) + ". [" + (this.isDone.get(i) ? "✓" : "✗") + "] " + items.get(i);
+            result[0] = "The following items are tracked:";
+            for (int i = 1; i <= Task.getTaskCount(); ++i) {
+                Task task = tasks.get(i - 1);
+                result[i] = i + ". [" + (task.checkDone() ? "✓" : "✗") + "] " + task.getName();
             }
 
             return result;
@@ -50,9 +48,10 @@ public class DukeList {
      */
     public String markAsDone(int serialNum) {
         int index = serialNum - 1;
-        if (index < this.listSize) {
-            this.isDone.set(index, true);
-            return ("  [✓] " + this.items.get(index));
+        if (index < Task.getTaskCount()) {
+            Task currentTask = tasks.get(index);
+            currentTask.completeTask();
+            return ("  [✓] " + currentTask.getName());
         }
         else {
             return null;
