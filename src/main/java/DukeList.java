@@ -32,7 +32,7 @@ public class DukeList {
             for (int i = 1; i <= Task.getTaskCount(); ++i) {
                 Task task = tasks.get(i - 1);
                 // Format list entry as <serial number>. [<status>] <task name>
-                result[i] = i + ". [" + (task.getIsDone() ? "✓" : "✗") + "] " + task.getName();
+                result[i] = i + ". [" + (task.getIsDone() ? "Done" : "Not done") + "] " + task.getName();
             }
 
             return result;
@@ -52,7 +52,7 @@ public class DukeList {
         if (index < Task.getTaskCount()) {
             Task currentTask = tasks.get(index);
             currentTask.setIsDone();
-            return ("  [✓] " + currentTask.getName());
+            return ("  [Done] " + currentTask.getName());
         }
         else {
             return null;
