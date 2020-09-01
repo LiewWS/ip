@@ -2,24 +2,29 @@ public class Task {
     private String name;
     private boolean isDone;
 
-    public static int taskCount = 0;
+    private static int taskCount = 0;
 
-    public Task(String n) {
-        this.name = n;
-        this.isDone = false;
+    public Task(String name) {
+        this.name = name;
+        isDone = false;
         taskCount += 1;
     }
 
     public void setIsDone() {
-        this.isDone = true;
+        isDone = true;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public boolean getIsDone() {
-        return this.isDone;
+        return isDone;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + (isDone ? "Done" : "Not done") + "] " + name;
     }
 
     public static int getTaskCount() {

@@ -28,8 +28,8 @@ public class Duke {
                 }
             }
             else {
-                dList.addTask(cmd);
-                String[] status = {"added: " + cmd};
+                //dList.addTask(cmd);
+                String[] status = {"Task added:\n" + cmd, dList.reportListSize()};
                 printOut(status);
             }
         }

@@ -4,16 +4,15 @@ public class DukeList {
     private ArrayList<Task> tasks;
 
     public DukeList() {
-        this.tasks = new ArrayList();
+        tasks = new ArrayList();
     }
 
     /**
      * Creates a new task and adds it to the list.
-     * @param name is the name of task to be added to the list.
+     * @param task is the name of task to be added to the list.
      */
-    public void addTask(String name) {
-        Task task = new Task(name);
-        this.tasks.add(task);
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     /**
@@ -32,7 +31,7 @@ public class DukeList {
             for (int i = 1; i <= Task.getTaskCount(); ++i) {
                 Task task = tasks.get(i - 1);
                 // Format list entry as <serial number>. [<status>] <task name>
-                result[i] = i + ". [" + (task.getIsDone() ? "Done" : "Not done") + "] " + task.getName();
+                result[i] = i + ". " + task.toString();
             }
 
             return result;
@@ -52,10 +51,18 @@ public class DukeList {
         if (index < Task.getTaskCount()) {
             Task currentTask = tasks.get(index);
             currentTask.setIsDone();
-            return ("  [Done] " + currentTask.getName());
+            return ("  " + currentTask.toString());
         }
         else {
             return null;
         }
+    }
+
+    /**
+     * Reports the number of tasks in the list.
+     * @return string that reports the number of tasks in the list.
+     */
+    public String reportListSize() {
+        return "This list has " + Task.getTaskCount() + " tasks.";
     }
 }
