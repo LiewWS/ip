@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Duke {
+    // Number of elements in in the array param to printOut in addition to list items.
+    private static final int ADD_ELEMS = 3;
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         DukeList dList = new DukeList();
@@ -9,6 +12,7 @@ public class Duke {
 
         printOut(greet);
         while (true) {
+            String[] status = new String[dList.getListSize() + ADD_ELEMS];
             String cmd = scan.nextLine();
             if (cmd.equals("bye")) {
                 break;
@@ -19,17 +23,39 @@ public class Duke {
                     printOut(list);
                 }
             }
-            else if (cmd.contains("done")) {
+            else {
                 String[] arguments = cmd.split(" ");
-                String[] status = {"Nice! You have completed the following item: ",
-                        dList.markAsDone(Integer.valueOf(arguments[1]))};
-                if (status[1] != null) {
-                    printOut(status);
+                if (arguments[0].equals("done")) {
+                    status[0] = "Nice! You have completed the following item: ";
+                    status[1] = dList.markAsDone(Integer.valueOf(arguments[1]));
+                }
+                else {
+                    String[] details = parseAdd(arguments);
+
+                    if (arguments[0].equals("todo")) {
+                        ToDo todo = new ToDo(details[0]);
+                        status[1] = todo.toString();
+                        dList.addTask(todo);
+                    }
+                    else if (arguments[0].equals("deadline")) {
+                        Deadline dead = new Deadline(details[0], details[1]);
+                        status[1] = dead.toString();
+                        dList.addTask(dead);
+                    }
+                    else if (arguments[0].equals("event")) {
+                        Event event = new Event(details[0], details[1]);
+                        status[1] = event.toString();
+                        dList.addTask(event);
+                    }
+                    else {
+                        status[1] = null;
+                    }
+
+                    status[0] = "Task added: ";
+                    status[2] = dList.reportListSize();
                 }
             }
-            else {
-                //dList.addTask(cmd);
-                String[] status = {"Task added:\n" + cmd, dList.reportListSize()};
+            if (status[1] != null) {
                 printOut(status);
             }
         }
@@ -51,9 +77,37 @@ public class Duke {
     public static void printOut(String[] lines) {
         printDiv();
         for (String line : lines) {
-            System.out.println(" " + line);
+            if (line != null) {
+                System.out.println(" " + line);
+            }
         }
         printDiv();
+    }
+
+    /**
+     * Parse the command to add a task to Duke List
+     * @param args Array of Strings obtained from splitting a command by spaces.
+     * @return Array of Strings. 1st element is to task name. 2nd is timing info.
+     */
+    public static String[] parseAdd(String[] args) {
+        String[] ret = {"", ""};
+        boolean isName = true;
+
+        for (int i = 1; i < args.length; ++i) {
+            if (args[i].equals("/by") || args[i].equals("/at")) {
+                isName = false;
+            }
+            else if (isName) {
+                // Concatenate to first element that corresponds to name
+                ret[0] = ret[0] + args[i] + " ";
+            }
+            else {
+                // Concatenate to second element that corresponds to time
+                ret[1] = ret[1] + args[i] + " ";
+            }
+        }
+
+        return ret;
     }
 
     /**
