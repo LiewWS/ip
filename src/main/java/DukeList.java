@@ -44,14 +44,15 @@ public class DukeList {
     /**
      * Mark a task as done by setting isDone attribute to true.
      * @param serialNum serial number of task as printed when tasks are listed.
-     * @return String to indicate success. Null if index out of bounds.
+     * @return String array to indicate success. Null if index out of bounds.
      */
-    public String markAsDone(int serialNum) {
+    public String[] markAsDone(int serialNum) {
         int index = serialNum - 1;
         if (index < Task.getTaskCount()) {
             Task currentTask = tasks.get(index);
             currentTask.setIsDone();
-            return ("  " + currentTask.toString());
+            return new String[] {"Nice! You have completed the following item: ",
+                    "  " + currentTask.toString()};
         }
         else {
             return null;
