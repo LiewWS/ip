@@ -63,7 +63,7 @@ public class DukeList {
      * @return string that reports the number of tasks in the list.
      */
     public String reportListSize() {
-        return "This list has " + Task.getTaskCount() + " tasks.";
+        return "This list has " + Task.getTaskCount() + " task" + (Task.getTaskCount() > 1 ? "s." : ".");
     }
 
     public int getListSize() {

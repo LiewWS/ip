@@ -24,7 +24,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "[" + (isDone ? "Done" : "Not done") + "] " + name;
+        return "[" + (isDone ? "Y" : "N") + "] " + name;
     }
 
     public static int getTaskCount() {
