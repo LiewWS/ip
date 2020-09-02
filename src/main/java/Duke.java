@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Duke {
-    // Number of elements in in the array param to printOut in addition to list items.
+    // Number of elements in the status array in main in addition to list items.
     private static final int ADD_ELEMS = 3;
 
     public static void main(String[] args) {
@@ -12,7 +12,6 @@ public class Duke {
 
         printOut(greet);
         while (true) {
-            String[] status = new String[dList.getListSize() + ADD_ELEMS];
             String cmd = scan.nextLine();
             if (cmd.equals("bye")) {
                 break;
@@ -25,38 +24,19 @@ public class Duke {
             }
             else {
                 String[] arguments = cmd.split(" ");
+                String[] status = new String[dList.getListSize() + ADD_ELEMS];
+
                 if (arguments[0].equals("done")) {
                     status[0] = "Nice! You have completed the following item: ";
                     status[1] = dList.markAsDone(Integer.valueOf(arguments[1]));
                 }
                 else {
-                    String[] details = parseAdd(arguments);
-
-                    if (arguments[0].equals("todo")) {
-                        ToDo todo = new ToDo(details[0]);
-                        status[1] = todo.toString();
-                        dList.addTask(todo);
-                    }
-                    else if (arguments[0].equals("deadline")) {
-                        Deadline dead = new Deadline(details[0], details[1]);
-                        status[1] = dead.toString();
-                        dList.addTask(dead);
-                    }
-                    else if (arguments[0].equals("event")) {
-                        Event event = new Event(details[0], details[1]);
-                        status[1] = event.toString();
-                        dList.addTask(event);
-                    }
-                    else {
-                        status[1] = null;
-                    }
-
-                    status[0] = "Task added: ";
-                    status[2] = dList.reportListSize();
+                    parseAdd(arguments, dList, status);
                 }
-            }
-            if (status[1] != null) {
-                printOut(status);
+
+                if (status[1] != null) {
+                    printOut(status);
+                }
             }
         }
         printOut(quit);
@@ -77,9 +57,10 @@ public class Duke {
     public static void printOut(String[] lines) {
         printDiv();
         for (String line : lines) {
-            if (line != null) {
-                System.out.println(" " + line);
+            if (line == null) {
+                break;
             }
+            System.out.println(" " + line);
         }
         printDiv();
     }
@@ -87,10 +68,13 @@ public class Duke {
     /**
      * Parse the command to add a task to Duke List
      * @param args Array of Strings obtained from splitting a command by spaces.
-     * @return Array of Strings. 1st element is to task name. 2nd is timing info.
+     * @param dList DukeList to add the task to.
+     * @param status Array of Strings to indicate result of adding task. Null at element 1 indicates error.
      */
-    public static String[] parseAdd(String[] args) {
-        String[] ret = {"", ""};
+    public static void parseAdd(String[] args, DukeList dList, String[] status) {
+        String name = "";
+        String time = "";
+        Task task;
         boolean isName = true;
 
         for (int i = 1; i < args.length; ++i) {
@@ -99,15 +83,31 @@ public class Duke {
             }
             else if (isName) {
                 // Concatenate to first element that corresponds to name
-                ret[0] = ret[0] + args[i] + " ";
+                name = name + args[i] + " ";
             }
             else {
                 // Concatenate to second element that corresponds to time
-                ret[1] = ret[1] + args[i] + " ";
+                time = time + args[i] + " ";
             }
         }
 
-        return ret;
+        if (args[0].equals("todo")) {
+            task = (Task) new ToDo(name);
+        }
+        else if (args[0].equals("deadline")) {
+            task = (Task) new Deadline(name, time);
+        }
+        else if (args[0].equals("event")) {
+            task = (Task) new Event(name, time);
+        }
+        else {
+            status[1] = null;
+            return;
+        }
+        dList.addTask(task);
+        status[0] = "Task added: ";
+        status[1] = task.toString();
+        status[2] = dList.reportListSize();
     }
 
     /**
