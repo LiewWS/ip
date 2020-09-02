@@ -51,8 +51,8 @@ public class DukeList {
         if (index < Task.getTaskCount()) {
             Task currentTask = tasks.get(index);
             currentTask.setIsDone();
-            return new String[] {"Nice! You have completed the following item: ",
-                    "  " + currentTask.toString()};
+            return (new String[] {"Nice! You have completed the following item: ",
+                    "  " + currentTask.toString()});
         }
         else {
             return null;
@@ -64,7 +64,7 @@ public class DukeList {
      * @return string that reports the number of tasks in the list.
      */
     public String reportListSize() {
-        return "This list has " + Task.getTaskCount() + " task" + (Task.getTaskCount() > 1 ? "s." : ".");
+        return ("This list has " + Task.getTaskCount() + " task" + ((Task.getTaskCount() > 1) ? "s." : "."));
     }
 
     public int getListSize() {

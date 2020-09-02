@@ -8,6 +8,6 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[Deadline]" + super.toString() + "( by: " + dateTime + ")";
+        return ("[Deadline]" + super.toString() + "( by: " + dateTime + ")");
     }
 }

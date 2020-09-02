@@ -99,7 +99,7 @@ public class Duke {
         else {
             return null;
         }
-        
+
         dList.addTask(task);
         return new String[] {"Task added: ", task.toString(), dList.reportListSize()};
     }
