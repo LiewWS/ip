@@ -12,21 +12,18 @@ public class Duke {
             String cmd = scan.nextLine();
             if (cmd.equals("bye")) {
                 break;
-            }
-            else if (cmd.equals("list")) {
+            } else if (cmd.equals("list")) {
                 String[] list = dList.listTasks();
                 if (list != null) {
                     printOut(list);
                 }
-            }
-            else {
+            } else {
                 String[] arguments = cmd.split(" ");
                 String[] status;
 
                 if (arguments[0].equals("done")) {
                     status = dList.markAsDone(Integer.valueOf(arguments[1]));
-                }
-                else {
+                } else {
                     status = parseAdd(arguments, dList);
                 }
 
@@ -76,12 +73,10 @@ public class Duke {
         for (int i = 1; i < args.length; ++i) {
             if (args[i].equals("/by") || args[i].equals("/at")) {
                 isName = false;
-            }
-            else if (isName) {
+            } else if (isName) {
                 // Concatenate to first element that corresponds to name
                 name = name + args[i] + " ";
-            }
-            else {
+            } else {
                 // Concatenate to second element that corresponds to time
                 time = time + args[i] + " ";
             }
@@ -89,14 +84,11 @@ public class Duke {
 
         if (args[0].equals("todo")) {
             task = (Task) new ToDo(name);
-        }
-        else if (args[0].equals("deadline")) {
+        } else if (args[0].equals("deadline")) {
             task = (Task) new Deadline(name, time);
-        }
-        else if (args[0].equals("event")) {
+        } else if (args[0].equals("event")) {
             task = (Task) new Event(name, time);
-        }
-        else {
+        } else {
             return null;
         }
 

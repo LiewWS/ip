@@ -35,8 +35,7 @@ public class DukeList {
             }
 
             return result;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -53,8 +52,7 @@ public class DukeList {
             currentTask.setIsDone();
             return (new String[] {"Nice! You have completed the following item: ",
                     "  " + currentTask.toString()});
-        }
-        else {
+        } else {
             return null;
         }
     }
