@@ -27,9 +27,10 @@ public class Duke {
                     status = parseAdd(arguments, dList);
                 }
 
-                if (status != null) {
-                    printOut(status);
+                if (status == null) {
+                    status = new String[] {"Woah hol up! That is not a valid command."};
                 }
+                printOut(status);
             }
         }
         printOut(quit);
@@ -80,6 +81,10 @@ public class Duke {
                 // Concatenate to second element that corresponds to time
                 time = time + args[i] + " ";
             }
+        }
+
+        if (name.isEmpty()) {
+            return new String[] {"Hey! Description of " + args[0] + " cannot be empty."};
         }
 
         if (args[0].equals("todo")) {
