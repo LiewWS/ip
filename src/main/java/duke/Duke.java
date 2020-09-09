@@ -6,9 +6,11 @@ import duke.task.Task;
 import duke.task.TaskType;
 import duke.task.ToDo;
 
-import java.util.Scanner;
+import static duke.task.TaskType.DEADLINE;
+import static duke.task.TaskType.EVENT;
+import static duke.task.TaskType.TODO;
 
-import static duke.task.TaskType.*;
+import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
