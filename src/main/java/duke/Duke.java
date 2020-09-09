@@ -1,3 +1,10 @@
+package duke;
+
+import duke.task.Deadline;
+import duke.task.Event;
+import duke.task.Task;
+import duke.task.ToDo;
+
 import java.util.Scanner;
 
 public class Duke {
@@ -66,9 +73,9 @@ public class Duke {
     }
 
     /**
-     * Parse the command to add a task to Duke List
+     * Parse the command to add a task to duke.Duke List
      * @param args Array of Strings obtained from splitting a command by spaces.
-     * @param dList DukeList to add the task to.
+     * @param dList duke.DukeList to add the task to.
      * @return Array of Strings to indicate result of adding task. Null indicates error.
      */
     public static String[] parseAdd(String[] args, DukeList dList) throws DukeException {
