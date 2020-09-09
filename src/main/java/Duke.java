@@ -13,23 +13,29 @@ public class Duke {
             if (cmd.equals("bye")) {
                 break;
             } else if (cmd.equals("list")) {
-                String[] list = dList.listTasks();
-                if (list != null) {
+                try {
+                    String[] list = dList.listTasks();
                     printOut(list);
+                } catch (DukeException dex){
+                    String[] errorMessage = new String[] {dex.getMessage()};
+                    printOut(errorMessage);
                 }
             } else {
                 String[] arguments = cmd.split(" ");
                 String[] status;
 
-                if (arguments[0].equals("done")) {
-                    status = dList.markAsDone(Integer.valueOf(arguments[1]));
-                } else {
-                    status = parseAdd(arguments, dList);
+                try {
+                    if (arguments[0].equals("done")) {
+                        status = dList.markAsDone(Integer.valueOf(arguments[1]));
+                    } else {
+                        status = parseAdd(arguments, dList);
+                    }
+                } catch (DukeException dex) {
+                    status = new String[]{dex.getMessage()};
+                } catch (IndexOutOfBoundsException ex) {
+                    status = new String[]{"The index you are looking for is not in this list."};
                 }
 
-                if (status == null) {
-                    status = new String[] {"Woah hol up! That is not a valid command."};
-                }
                 printOut(status);
             }
         }
@@ -65,7 +71,7 @@ public class Duke {
      * @param dList DukeList to add the task to.
      * @return Array of Strings to indicate result of adding task. Null indicates error.
      */
-    public static String[] parseAdd(String[] args, DukeList dList) {
+    public static String[] parseAdd(String[] args, DukeList dList) throws DukeException {
         String name = "";
         String time = "";
         Task task;
@@ -84,7 +90,7 @@ public class Duke {
         }
 
         if (name.isEmpty()) {
-            return new String[] {"Hey! Description of " + args[0] + " cannot be empty."};
+            throw new DukeException("Hey! Description of " + args[0] + " cannot be empty.");
         }
 
         if (args[0].equals("todo")) {
@@ -94,7 +100,7 @@ public class Duke {
         } else if (args[0].equals("event")) {
             task = (Task) new Event(name, time);
         } else {
-            return null;
+            throw new DukeException("Woah hol up! That is not a valid command.");
         }
 
         dList.addTask(task);

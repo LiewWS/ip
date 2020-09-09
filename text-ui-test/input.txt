@@ -1,6 +1,9 @@
+list
+done -1
 todo read book
 deadline return book /by June 6th
 done 1
+done 314
 event project meeting /at Aug 6th 2-4pm
 todo join sports club
 done 4
@@ -13,5 +16,6 @@ todo
 deadline
 event
 fly a kite
+done 0
 bye
 

@@ -23,7 +23,7 @@ public class DukeList {
      * ✓ indicates that task is done and ✗ indicates that the task is not done.
      * @return Array of Strings that enumerates the tasks in our list. Null if list empty.
      */
-    public String[] listTasks() {
+    public String[] listTasks() throws DukeException {
         if (Task.getTaskCount() > 0) {
             String[] result = new String[Task.getTaskCount() + 1];
 
@@ -33,10 +33,9 @@ public class DukeList {
                 // Format list entry as <serial number>. [<status>] <task name>
                 result[i] = i + ". " + task.toString();
             }
-
             return result;
         } else {
-            return null;
+            throw new DukeException("There are no tasks to list.");
         }
     }
 
@@ -47,14 +46,11 @@ public class DukeList {
      */
     public String[] markAsDone(int serialNum) {
         int index = serialNum - 1;
-        if (index < Task.getTaskCount()) {
-            Task currentTask = tasks.get(index);
-            currentTask.setIsDone();
-            return (new String[] {"Nice! You have completed the following item: ",
-                    "  " + currentTask.toString()});
-        } else {
-            return null;
-        }
+
+        Task currentTask = tasks.get(index);
+        currentTask.setIsDone();
+        return (new String[] {"Nice! You have completed the following item: ",
+                "  " + currentTask.toString()});
     }
 
     /**
