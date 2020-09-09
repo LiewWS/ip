@@ -3,50 +3,46 @@ package duke;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
+import duke.task.TaskType;
 import duke.task.ToDo;
 
 import java.util.Scanner;
+
+import static duke.task.TaskType.*;
 
 public class Duke {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         DukeList dList = new DukeList();
         String[] greet = {getLogo(), "Hello! I'm Duke", "What can I do for you?"};
-        String[] quit = {"Bye. Hope to see you again soon!"};
 
         printOut(greet);
         while (true) {
             String cmd = scan.nextLine();
-            if (cmd.equals("bye")) {
-                break;
-            } else if (cmd.equals("list")) {
-                try {
-                    String[] list = dList.listTasks();
-                    printOut(list);
-                } catch (DukeException dex){
-                    String[] errorMessage = new String[] {dex.getMessage()};
-                    printOut(errorMessage);
+            String[] arguments = cmd.split(" ");
+            try {
+                if (arguments[0].equals("bye")) {
+                    break;
+                } else if (arguments[0].equals("list")) {
+                    printOut(dList.listTasks());
+                } else if (arguments[0].equals("done")) {
+                    printOut(dList.markAsDone(Integer.valueOf(arguments[1])));
+                } else if (arguments[0].equals("todo")) {
+                    printOut(parseAdd(TODO, arguments, dList));
+                } else if (arguments[0].equals("deadline")) {
+                    printOut(parseAdd(DEADLINE, arguments, dList));
+                } else if (arguments[0].equals("event")) {
+                    printOut(parseAdd(EVENT, arguments, dList));
+                } else {
+                    printOutSingle("Woah hol up! That is not a valid command.");
                 }
-            } else {
-                String[] arguments = cmd.split(" ");
-                String[] status;
-
-                try {
-                    if (arguments[0].equals("done")) {
-                        status = dList.markAsDone(Integer.valueOf(arguments[1]));
-                    } else {
-                        status = parseAdd(arguments, dList);
-                    }
-                } catch (DukeException dex) {
-                    status = new String[]{dex.getMessage()};
-                } catch (IndexOutOfBoundsException ex) {
-                    status = new String[]{"The index you are looking for is not in this list."};
-                }
-
-                printOut(status);
+            } catch (DukeException dex) {
+                printOutSingle(dex.getMessage());
+            } catch (IndexOutOfBoundsException ex) {
+                printOutSingle("The index you are looking for is unavailable.");
             }
         }
-        printOut(quit);
+        printOutSingle("Bye. Hope to see you again soon!");
     }
 
     /**
@@ -57,7 +53,7 @@ public class Duke {
     }
 
     /**
-     * Prints each string in the array on a separate line with one space indentation.
+     * Prints each string on a separate line with one space indentation.
      * Starts and ends the group of output with a horizontal line divider.
      * @param lines Array of Strings to be printed on separate lines.
      */
@@ -73,15 +69,25 @@ public class Duke {
     }
 
     /**
+     * printOut for output that consists of only one line.
+     * @param line String to be printed.
+     */
+    public static void printOutSingle(String line) {
+        printDiv();
+        System.out.println(" " + line);
+        printDiv();
+    }
+
+    /**
      * Parse the command to add a task to duke.Duke List
+     * @param type The type of task from task.TaskType to create.
      * @param args Array of Strings obtained from splitting a command by spaces.
      * @param dList duke.DukeList to add the task to.
-     * @return Array of Strings to indicate result of adding task. Null indicates error.
+     * @return Array of Strings to indicate result of adding task.
      */
-    public static String[] parseAdd(String[] args, DukeList dList) throws DukeException {
+    public static String[] parseAdd(TaskType type, String[] args, DukeList dList) throws DukeException {
         String name = "";
         String time = "";
-        Task task;
         boolean isName = true;
 
         for (int i = 1; i < args.length; ++i) {
@@ -95,21 +101,23 @@ public class Duke {
                 time = time + args[i] + " ";
             }
         }
-
         if (name.isEmpty()) {
             throw new DukeException("Hey! Description of " + args[0] + " cannot be empty.");
         }
 
-        if (args[0].equals("todo")) {
+        Task task = null;
+        switch (type) {
+        case TODO:
             task = (Task) new ToDo(name);
-        } else if (args[0].equals("deadline")) {
+            break;
+        case DEADLINE:
             task = (Task) new Deadline(name, time);
-        } else if (args[0].equals("event")) {
+            break;
+        case EVENT:
             task = (Task) new Event(name, time);
-        } else {
-            throw new DukeException("Woah hol up! That is not a valid command.");
+            break;
         }
-
+        // There are no other cases
         dList.addTask(task);
         return new String[] {"Task added: ", task.toString(), dList.reportListSize()};
     }

@@ -24,7 +24,7 @@ public class DukeList {
      * The first element is a string that serves as a header for the list.
      * Each subsequent element begins with the serial number which is 1 more than the task index.
      * Each subsequent element of the array also has a status field.
-     * ✓ indicates that task is done and ✗ indicates that the task is not done.
+     * Y indicates that task is done and N indicates that the task is not done.
      * @return Array of Strings that enumerates the tasks in our list. Null if list empty.
      */
     public String[] listTasks() throws DukeException {
@@ -63,9 +63,5 @@ public class DukeList {
      */
     public String reportListSize() {
         return ("This list has " + Task.getTaskCount() + " task" + ((Task.getTaskCount() > 1) ? "s." : "."));
-    }
-
-    public int getListSize() {
-        return Task.getTaskCount();
     }
 }
