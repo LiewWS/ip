@@ -29,6 +29,8 @@ public class Duke {
                     printOut(dList.listTasks());
                 } else if (arguments[0].equals("done")) {
                     printOut(dList.markAsDone(Integer.valueOf(arguments[1])));
+                } else if (arguments[0].equals("delete")) {
+                    printOut(dList.deleteTask(Integer.valueOf(arguments[1])));
                 } else if (arguments[0].equals("todo")) {
                     printOut(parseAdd(TODO, arguments, dList));
                 } else if (arguments[0].equals("deadline")) {
@@ -42,6 +44,8 @@ public class Duke {
                 printOutSingle(dex.getMessage());
             } catch (IndexOutOfBoundsException ex) {
                 printOutSingle("The index you are looking for is unavailable.");
+            } catch (NumberFormatException ex) {
+                printOutSingle("Expected input is a number.");
             }
         }
         printOutSingle("Bye. Hope to see you again soon!");
