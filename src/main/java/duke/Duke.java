@@ -10,12 +10,18 @@ import static duke.task.TaskType.DEADLINE;
 import static duke.task.TaskType.EVENT;
 import static duke.task.TaskType.TODO;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         DukeList dList = new DukeList();
+        try {
+            FileHandler.readFromFile(dList);
+        } catch (IOException ex) {
+            printOutSingle("Unable to open file for reading.");
+        }
         String[] greet = {getLogo(), "Hello! I'm Duke", "What can I do for you?"};
 
         printOut(greet);
@@ -24,6 +30,7 @@ public class Duke {
             String[] arguments = cmd.split(" ");
             try {
                 if (arguments[0].equals("bye")) {
+                    FileHandler.writeToFile(dList);
                     break;
                 } else if (arguments[0].equals("list")) {
                     printOut(dList.listTasks());
@@ -42,6 +49,8 @@ public class Duke {
                 printOutSingle(dex.getMessage());
             } catch (IndexOutOfBoundsException ex) {
                 printOutSingle("The index you are looking for is unavailable.");
+            } catch (IOException ex) {
+                printOutSingle("Unable to write to file.");
             }
         }
         printOutSingle("Bye. Hope to see you again soon!");
@@ -96,10 +105,10 @@ public class Duke {
             if (args[i].equals("/by") || args[i].equals("/at")) {
                 isName = false;
             } else if (isName) {
-                // Concatenate to first element that corresponds to name
+                // Concatenate to name
                 name = name + args[i] + " ";
             } else {
-                // Concatenate to second element that corresponds to time
+                // Concatenate to time
                 time = time + args[i] + " ";
             }
         }

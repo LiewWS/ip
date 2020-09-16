@@ -8,7 +8,7 @@ public class DukeList {
     private ArrayList<Task> tasks;
 
     public DukeList() {
-        tasks = new ArrayList();
+        tasks = new ArrayList<Task>();
     }
 
     /**
