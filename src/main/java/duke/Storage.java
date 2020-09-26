@@ -112,21 +112,20 @@ public class Storage {
         Files.delete(Paths.get(filePath));
     }
 
-    public void writeToFile(DukeList dukeList) throws IOException {
-        FileWriter writer = new FileWriter(filePath, true);
-        try {
-            String[] lines = dukeList.listTasks();
-            for (int i = 1; i < lines.length; ++i) {
-                // Ignore the first line.
-                writer.write(toFileFormat(lines[i]));
-                writer.write(System.lineSeparator());
-            }
-            writer.close();
-        } catch (DukeException dex) {
-            if (dex.getExType() != ExceptionType.EMPTY_LIST) {
-                System.out.println(dex.getMessage());
-            }
+    public void writeToFile(DukeList dukeList) throws IOException, DukeException {
+        if (dukeList.isEmpty()) {
+            // Nothing to write
+            return;
         }
+
+        FileWriter writer = new FileWriter(filePath, true);
+        String[] lines = dukeList.listTasks();
+        for (int i = 1; i < lines.length; ++i) {
+            // Ignore the first line.
+            writer.write(toFileFormat(lines[i]));
+            writer.write(System.lineSeparator());
+        }
+        writer.close();
     }
 }
 

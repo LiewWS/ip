@@ -18,6 +18,9 @@ public class DukeList {
      * @param task is the name of task to be added to the list.
      */
     public void addTask(Task task) {
+        if (task == null) {
+            return;
+        }
         tasks.add(task);
     }
 
@@ -43,7 +46,7 @@ public class DukeList {
      * @return Array of Strings that enumerates the tasks in our list. Null if list empty.
      */
     public String[] listTasks() throws DukeException {
-        if (tasks.size() <= 0) {
+        if (isEmpty()) {
             throw new DukeException(ExceptionType.EMPTY_LIST);
         }
 
@@ -77,5 +80,9 @@ public class DukeList {
      */
     public String reportListSize() {
         return ("This list has " + tasks.size() + " task" + ((tasks.size() > 1) ? "s." : "."));
+    }
+
+    public boolean isEmpty() {
+        return (tasks.size() <= 0);
     }
 }
