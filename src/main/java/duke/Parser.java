@@ -13,6 +13,7 @@ public class Parser {
     private static final String STRING_TODO = "todo";
     private static final String STRING_DEADLINE = "deadline";
     private static final String STRING_EVENT = "event";
+    private static final String STRING_FIND = "find";
 
     public static Command parseRaw(String rawCommand) throws DukeException {
         Command result;
@@ -44,6 +45,10 @@ public class Parser {
             break;
         case STRING_EVENT:
             result = parseAdd(TaskType.EVENT, arguments);
+            break;
+        case STRING_FIND:
+            String keyword = reconstructKeyword(arguments);
+            result = new FindCommand(keyword);
             break;
         default:
             result = new InvalidCommand();
@@ -97,5 +102,13 @@ public class Parser {
         }
         // There are no other cases
         return cmd;
+    }
+
+    private static String reconstructKeyword(String[] words) {
+        String keyword = "";
+        for (int i = 1; i < words.length; ++i) {
+            keyword += words[i] + " ";
+        }
+        return keyword.trim();
     }
 }
