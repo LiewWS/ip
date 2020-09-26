@@ -1,5 +1,7 @@
 package duke;
 
+import duke.Exceptions.DukeException;
+import duke.Exceptions.ExceptionTypes;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
@@ -14,13 +16,16 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Duke {
+    private static final String DATA_FILE_PATH = "data/list_data.txt";
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         DukeList dList = new DukeList();
+        Storage store = new Storage(DATA_FILE_PATH);
+
         try {
-            FileHandler.readFromFile(dList);
+            store.readFromFile(dList);
         } catch (IOException ex) {
-            printOutSingle("Unable to open file for reading.");
+            printOutSingle(ex.getMessage());
         }
         String[] greet = {getLogo(), "Hello! I'm Duke", "What can I do for you?"};
 
@@ -30,7 +35,7 @@ public class Duke {
             String[] arguments = cmd.split(" ");
             try {
                 if (arguments[0].equals("bye")) {
-                    FileHandler.writeToFile(dList);
+                    store.writeToFile(dList);
                     break;
                 } else if (arguments[0].equals("list")) {
                     printOut(dList.listTasks());
@@ -45,12 +50,8 @@ public class Duke {
                 } else {
                     printOutSingle("Woah hol up! That is not a valid command.");
                 }
-            } catch (DukeException dex) {
-                printOutSingle(dex.getMessage());
-            } catch (IndexOutOfBoundsException ex) {
-                printOutSingle("The index you are looking for is unavailable.");
-            } catch (IOException ex) {
-                printOutSingle("Unable to write to file.");
+            } catch (DukeException | IndexOutOfBoundsException | IOException ex) {
+                printOutSingle(ex.getMessage());
             }
         }
         printOutSingle("Bye. Hope to see you again soon!");
@@ -112,19 +113,25 @@ public class Duke {
                 time = time + args[i] + " ";
             }
         }
-        if (name.isEmpty()) {
-            throw new DukeException("Hey! Description of " + args[0] + " cannot be empty.");
-        }
 
         Task task = null;
         switch (type) {
         case TODO:
+            if (name.isEmpty()) {
+                throw new DukeException(ExceptionTypes.NO_TODO_DESCRIPTION);
+            }
             task = (Task) new ToDo(name);
             break;
         case DEADLINE:
+            if (name.isEmpty()) {
+                throw new DukeException(ExceptionTypes.NO_DEADLINE_DESCRIPTION);
+            }
             task = (Task) new Deadline(name, time);
             break;
         case EVENT:
+            if (name.isEmpty()) {
+                throw new DukeException(ExceptionTypes.NO_EVENT_DESCRIPTION);
+            }
             task = (Task) new Event(name, time);
             break;
         }

@@ -1,25 +1,32 @@
 package duke;
 
+import duke.Exceptions.DukeException;
+import duke.Exceptions.ExceptionTypes;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
 import duke.task.ToDo;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.File;
-import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.Scanner;
 
-public class FileHandler {
-    private static final String DATA_FILE_NAME = "../../../data/list_data.txt";
+public class Storage {
+    private String filePath;
     private static final int IS_TYPE = 0;
     private static final int IS_DONE = 1;
     private static final int IS_NAME = 2;
     private static final int IS_TIME = 3;
 
-    private static Task createTask(String[] details) {
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
+
+    private Task createTask(String[] details) {
         Task currentTask = null;
         boolean[] flags = {true, false, false, false};
         String[] fields = {"", "", "", ""};
@@ -64,42 +71,56 @@ public class FileHandler {
         String result = "";
 
         String[] typeAndDone = line.split("]");
-        fields[IS_TYPE] = typeAndDone[IS_TYPE].replace("[", "");
+        String[] type = typeAndDone[0].split(" ");
+        fields[IS_TYPE] = type[1].replace("[", "");
         fields[IS_DONE] = typeAndDone[IS_DONE].replace("[", "");
         String[] nameAndTime = typeAndDone[2].replace("(", "]").split("]");
         fields[IS_NAME] = nameAndTime[0].trim();
         if (fields[IS_TYPE].equals("Deadline")) {
-            nameAndTime[1].replace("by:", "");
-            fields[IS_TIME] = nameAndTime[1].trim();
-        } else if (fields[IS_TYPE].equals("Deadline")) {
-            nameAndTime[1].replace("at:", "");
-            fields[IS_TIME] = nameAndTime[1].trim();
+            String time = nameAndTime[1].split("by:")[1].trim();
+            fields[IS_TIME] = time.replace(")", "");
+        } else if (fields[IS_TYPE].equals("Event")) {
+            String time = nameAndTime[1].split("at:")[1].trim();
+            fields[IS_TIME] = time.replace(")", "");
         }
 
         return fields[IS_TYPE] + " /done " + fields[IS_DONE] + " /name " + fields[IS_NAME]
                 + " /time " + fields[IS_TIME];
     }
 
-    public static void readFromFile(DukeList dukeList) throws IOException {
-        File dataFile = new File(DATA_FILE_NAME);
+    public void readFromFile(DukeList dukeList) throws IOException {
+        File dataFile = new File(filePath);
+
         if (!dataFile.exists()) {
             dataFile.createNewFile();
         }
-        Scanner scanner = new Scanner(Paths.get(DATA_FILE_NAME));
 
+        Scanner scanner = new Scanner(dataFile);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] details = line.split(" ");
             dukeList.addTask(createTask(details));
         }
+        scanner.close();
+
+        Files.delete(Paths.get(filePath));
     }
 
-    public static void writeToFile(DukeList dukeList) throws IOException, DukeException {
-        PrintWriter writer = new PrintWriter(DATA_FILE_NAME);
-        String[] lines = dukeList.listTasks();
-
-        for (String line : lines) {
-            writer.println(toFileFormat(line));
+    public void writeToFile(DukeList dukeList) throws IOException {
+        FileWriter writer = new FileWriter(filePath, true);
+        try {
+            String[] lines = dukeList.listTasks();
+            for (int i = 1; i < lines.length; ++i) {
+                // Ignore the first line.
+                writer.write(toFileFormat(lines[i]));
+                writer.write(System.lineSeparator());
+            }
+            writer.close();
+        } catch (DukeException dex) {
+            if (dex.getExType() != ExceptionTypes.EMPTY_LIST) {
+                System.out.println(dex.getMessage());
+            }
         }
     }
 }
+
