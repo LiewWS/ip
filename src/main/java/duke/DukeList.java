@@ -1,5 +1,7 @@
 package duke;
 
+import duke.Exceptions.DukeException;
+import duke.Exceptions.ExceptionTypes;
 import duke.task.Task;
 
 import java.util.ArrayList;
@@ -8,7 +10,7 @@ public class DukeList {
     private ArrayList<Task> tasks;
 
     public DukeList() {
-        tasks = new ArrayList();
+        tasks = new ArrayList<Task>();
     }
 
     /**
@@ -41,19 +43,18 @@ public class DukeList {
      * @return Array of Strings that enumerates the tasks in our list. Null if list empty.
      */
     public String[] listTasks() throws DukeException {
-        if (tasks.size() > 0) {
-            String[] result = new String[tasks.size() + 1];
-
-            result[0] = "The following items are tracked:";
-            for (int i = 1; i <= tasks.size(); ++i) {
-                Task task = tasks.get(i - 1);
-                // Format list entry as <serial number>. [<status>] <task name>
-                result[i] = i + ". " + task.toString();
-            }
-            return result;
-        } else {
-            throw new DukeException("There are no tasks to list.");
+        if (tasks.size() <= 0) {
+            throw new DukeException(ExceptionTypes.EMPTY_LIST);
         }
+
+        String[] result = new String[tasks.size() + 1];
+        result[0] = "The following items are tracked:";
+        for (int i = 1; i <= tasks.size(); ++i) {
+            Task task = tasks.get(i - 1);
+            // Format list entry as <serial number>. [<status>] <task name>
+            result[i] = i + ". " + task.toString();
+        }
+        return result;
     }
 
     /**
