@@ -91,6 +91,12 @@ public class Storage {
     public void readFromFile(DukeList dukeList) throws IOException {
         File dataFile = new File(filePath);
 
+        // Check if the directory exists and create directory if it does not exist
+        File dataDir = new File(dataFile.getParent());
+        if (!dataDir.exists()) {
+            dataDir.mkdir();
+        }
+
         if (!dataFile.exists()) {
             dataFile.createNewFile();
         }
