@@ -1,7 +1,7 @@
 package duke;
 
 import duke.Exceptions.DukeException;
-import duke.Exceptions.ExceptionTypes;
+import duke.Exceptions.ExceptionType;
 import duke.task.Task;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class DukeList {
      */
     public String[] listTasks() throws DukeException {
         if (tasks.size() <= 0) {
-            throw new DukeException(ExceptionTypes.EMPTY_LIST);
+            throw new DukeException(ExceptionType.EMPTY_LIST);
         }
 
         String[] result = new String[tasks.size() + 1];

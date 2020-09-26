@@ -1,7 +1,7 @@
 package duke;
 
 import duke.Exceptions.DukeException;
-import duke.Exceptions.ExceptionTypes;
+import duke.Exceptions.ExceptionType;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
@@ -117,7 +117,7 @@ public class Storage {
             }
             writer.close();
         } catch (DukeException dex) {
-            if (dex.getExType() != ExceptionTypes.EMPTY_LIST) {
+            if (dex.getExType() != ExceptionType.EMPTY_LIST) {
                 System.out.println(dex.getMessage());
             }
         }

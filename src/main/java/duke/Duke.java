@@ -1,7 +1,7 @@
 package duke;
 
 import duke.Exceptions.DukeException;
-import duke.Exceptions.ExceptionTypes;
+import duke.Exceptions.ExceptionType;
 import duke.task.Deadline;
 import duke.task.Event;
 import duke.task.Task;
@@ -120,19 +120,19 @@ public class Duke {
         switch (type) {
         case TODO:
             if (name.isEmpty()) {
-                throw new DukeException(ExceptionTypes.NO_TODO_DESCRIPTION);
+                throw new DukeException(ExceptionType.NO_TODO_DESCRIPTION);
             }
             task = (Task) new ToDo(name);
             break;
         case DEADLINE:
             if (name.isEmpty()) {
-                throw new DukeException(ExceptionTypes.NO_DEADLINE_DESCRIPTION);
+                throw new DukeException(ExceptionType.NO_DEADLINE_DESCRIPTION);
             }
             task = (Task) new Deadline(name, time);
             break;
         case EVENT:
             if (name.isEmpty()) {
-                throw new DukeException(ExceptionTypes.NO_EVENT_DESCRIPTION);
+                throw new DukeException(ExceptionType.NO_EVENT_DESCRIPTION);
             }
             task = (Task) new Event(name, time);
             break;

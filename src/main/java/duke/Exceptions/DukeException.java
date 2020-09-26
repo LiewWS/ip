@@ -1,9 +1,9 @@
 package duke.Exceptions;
 
 public class DukeException extends Exception {
-    private ExceptionTypes exType;
+    private ExceptionType exType;
 
-    public DukeException(ExceptionTypes exType) {
+    public DukeException(ExceptionType exType) {
         this.exType = exType;
     }
 
@@ -31,7 +31,7 @@ public class DukeException extends Exception {
         return msg;
     }
 
-    public ExceptionTypes getExType() {
+    public ExceptionType getExType() {
         return exType;
     }
 }
