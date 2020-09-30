@@ -15,6 +15,9 @@ import java.nio.file.Paths;
 
 import java.util.Scanner;
 
+/**
+ * Represents the file that user data will be read from and written to.
+ */
 public class Storage {
     private String filePath;
     private static final int IS_TYPE = 0;
@@ -22,10 +25,20 @@ public class Storage {
     private static final int IS_NAME = 2;
     private static final int IS_TIME = 3;
 
+    /**
+     * Constructor for creating a new Storage object
+     * @param filePath String that stores the relative path from current directory to file containing the data.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * This method parses a line in of text in the data file to create the task that the line
+     * describes.
+     * @param details Array of Strings containing the task information described by the line.
+     * @return Task object that represents the task within this program.
+     */
     private Task createTask(String[] details) {
         Task currentTask = null;
         boolean[] flags = {true, false, false, false};
@@ -66,6 +79,11 @@ public class Storage {
         return currentTask;
     }
 
+    /**
+     * Converts a line of output describing a task object into the format for storage.
+     * @param line String that describes the task in the format according to listTask()
+     * @return String that describes the task in the format for storage.
+     */
     private static String toFileFormat(String line) {
         String[] fields = {"", "", "", ""};
         String result = "";
@@ -88,6 +106,15 @@ public class Storage {
                 + " /time " + fields[IS_TIME];
     }
 
+    /**
+     * Performs the operation to read data from the storage file.
+     * Creates the file if it does not exist.
+     * Creates the directory if it does not exist.
+     * Delete the data file after reading so that duplicate info will not be saved
+     * at end of program.
+     * @param dukeList DukeList to store information read from the file.
+     * @throws IOException when file IO operations fail.
+     */
     public void readFromFile(DukeList dukeList) throws IOException {
         File dataFile = new File(filePath);
 
@@ -112,18 +139,26 @@ public class Storage {
         Files.delete(Paths.get(filePath));
     }
 
-    public void writeToFile(DukeList dukeList) throws IOException, DukeException {
-        if (dukeList.isEmpty()) {
-            // Nothing to write
-            return;
-        }
-
+    /**
+     * Performs the operation to write data to the storage file.
+     * Does not do anything if there is no data to write to file.
+     * @param dukeList DukeList that holds the current program data to be written to the storage file.
+     * @throws IOException when file IO operations fail
+     */
+    public void writeToFile(DukeList dukeList) throws IOException {
         FileWriter writer = new FileWriter(filePath, true);
-        String[] lines = dukeList.listTasks();
-        for (int i = 1; i < lines.length; ++i) {
-            // Ignore the first line.
-            writer.write(toFileFormat(lines[i]));
-            writer.write(System.lineSeparator());
+        try {
+            String[] lines = dukeList.listTasks();
+            for (int i = 1; i < lines.length; ++i) {
+                // Ignore the first line.
+                writer.write(toFileFormat(lines[i]));
+                writer.write(System.lineSeparator());
+            }
+        } catch (DukeException dex) {
+            if (dex.getExType() == ExceptionType.EMPTY_LIST) {
+                // Nothing to write
+                return;
+            }
         }
         writer.close();
     }

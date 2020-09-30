@@ -6,9 +6,17 @@ import duke.task.Task;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the list of tasks used in the Duke program.
+ * Supports add, delete, find, list and mark as done operations.
+ */
 public class DukeList {
     private ArrayList<Task> tasks;
 
+    /**
+     * Constructor that performs initial allocation of memory for ArrayList
+     * used to store the Task objects.
+     */
     public DukeList() {
         tasks = new ArrayList<Task>();
     }
@@ -28,8 +36,12 @@ public class DukeList {
      * Deletes a task from the list of tasks.
      * @param serialNum serial number of task as printed when tasks are listed.
      * @return String array to indicate success.
+     * @throws DukeException if an invalid serial number is provided.
      */
-    public String[] deleteTask(int serialNum) {
+    public String[] deleteTask(int serialNum) throws DukeException {
+        if (serialNum < 1 || serialNum > tasks.size()) {
+            throw new DukeException(ExceptionType.BAD_INDEX);
+        }
         int index = serialNum - 1;
         String[] result = {"Task removed:", tasks.get(index).toString(), ""};
         tasks.remove(index);
@@ -44,6 +56,7 @@ public class DukeList {
      * Each subsequent element of the array also has a status field.
      * Y indicates that task is done and N indicates that the task is not done.
      * @return Array of Strings that enumerates the tasks in our list. Null if list empty.
+     * @throws DukeException if the list is empty.
      */
     public String[] listTasks() throws DukeException {
         if (isEmpty()) {
@@ -64,10 +77,13 @@ public class DukeList {
      * Mark a task as done by setting isDone attribute to true.
      * @param serialNum serial number of task as printed when tasks are listed.
      * @return String array to indicate success.
+     * @throws DukeException if an invalid serial number is provided.
      */
-    public String[] markAsDone(int serialNum) {
+    public String[] markAsDone(int serialNum) throws DukeException {
+        if (serialNum < 1 || serialNum > tasks.size()) {
+            throw new DukeException(ExceptionType.BAD_INDEX);
+        }
         int index = serialNum - 1;
-
         Task currentTask = tasks.get(index);
         currentTask.setIsDone();
         return (new String[] {"Nice! You have completed the following item: ",
@@ -82,6 +98,10 @@ public class DukeList {
         return ("This list has " + tasks.size() + " task" + ((tasks.size() > 1) ? "s." : "."));
     }
 
+    /**
+     * Reports whether the list contains a positive integer number of task objects.
+     * @return True if list has at least one task, otherwise False.
+     */
     public boolean isEmpty() {
         return (tasks.size() <= 0);
     }

@@ -5,6 +5,9 @@ import duke.Exceptions.DukeException;
 import duke.Exceptions.ExceptionType;
 import duke.task.*;
 
+/**
+ * Parses the String inputs from the user to determine command to be executed.
+ */
 public class Parser {
     private static final String STRING_EXIT = "bye";
     private static final String STRING_LIST = "list";
@@ -14,9 +17,16 @@ public class Parser {
     private static final String STRING_DEADLINE = "deadline";
     private static final String STRING_EVENT = "event";
 
-    public static Command parseRaw(String rawCommand) throws DukeException {
+    /**
+     * The main method used to determine the command to execute based on the String supplied.
+     * @param rawCommand String to be parsed for valid commands.
+     * @return Command object that can be executed to carry out instruction intended by user.
+     * @throws DukeException from parseAdd.
+     * @throws NumberFormatException when converting a string to an integer fails.
+     */
+    public static Command parseRaw(String rawCommand) throws DukeException, NumberFormatException {
         Command result;
-        int index;
+        int serialNum;
         String name;
         String time;
 
@@ -29,12 +39,12 @@ public class Parser {
             result = new ListCommand();
             break;
         case STRING_DONE:
-            index = Integer.valueOf(arguments[1]);
-            result = new DoneCommand(index);
+            serialNum = Integer.valueOf(arguments[1]);
+            result = new DoneCommand(serialNum);
             break;
         case STRING_DELETE:
-            index = Integer.valueOf(arguments[1]);
-            result = new DeleteCommand(index);
+            serialNum = Integer.valueOf(arguments[1]);
+            result = new DeleteCommand(serialNum);
             break;
         case STRING_TODO:
             result = parseAdd(TaskType.TODO, arguments);
@@ -52,10 +62,12 @@ public class Parser {
     }
 
     /**
-     * Parse the command to add a task to duke.Duke List
+     * Parse the array of Strings to find the name and time details of the task to be created
+     * assuming that the correct task type is specified.
      * @param type The type of task from task.TaskType to create.
      * @param args Array of Strings obtained from splitting a command by spaces.
-     * @return Array of Strings to indicate result of adding task.
+     * @return Command object that can be executed to carry out instruction intended by user.
+     * @throws DukeException if a task to be added has no name.
      */
     private static Command parseAdd(TaskType type, String[] args) throws DukeException {
         String name = "";

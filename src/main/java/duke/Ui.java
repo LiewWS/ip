@@ -2,13 +2,27 @@ package duke;
 
 import java.util.Scanner;
 
+/**
+ * Represents the user interface of the program.
+ * Handles I/O to console.
+ */
 public class Ui {
+    private static final String[] GREETING = {Duke.getLogo(), "Hello, I am Duke", "What can I do for you?"};
+    private static final String FAREWELL = "Bye. Hope to see you again soon!";
     private Scanner scanner;
 
+    /**
+     * Constructor to create a new Ui object.
+     * Creates a scanner for reading input to program.
+     */
     public Ui() {
         scanner = new Scanner(System.in);
     }
 
+    /**
+     * Reads a line from the console.
+     * @return
+     */
     public String readLine() {
         return scanner.nextLine();
     }
@@ -44,5 +58,19 @@ public class Ui {
         printDiv();
         System.out.println(" " + line);
         printDiv();
+    }
+
+    /**
+     * Print to console the message for greeting user.
+     */
+    public void greet() {
+        printOut(GREETING);
+    }
+
+    /**
+     * Print to console the message when user exits.
+     */
+    public void bidFarewell() {
+        printOutSingle(FAREWELL);
     }
 }

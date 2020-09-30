@@ -6,13 +6,20 @@ import duke.Exceptions.DukeException;
 
 import java.io.IOException;
 
+/**
+ * Represents the main Duke program.
+ */
 public class Duke {
     private static final String DATA_FILE_PATH = "data/list_data.txt";
-    private static final String[] GREETING = {getLogo(), "Hello, I am Duke", "What can I do for you?"};
     private Ui ui;
     private DukeList dukeList;
     private Storage store;
 
+    /**
+     * Constructor for creating a Duke object.
+     * @param filePath String that identifies the relative path from current directory to the file
+     *                 that stores data provided by the user to Duke.
+     */
     public Duke(String filePath) {
         ui = new Ui();
         store = new Storage(filePath);
@@ -24,12 +31,17 @@ public class Duke {
         }
     }
 
+    /**
+     * Entry point of the Duke program.
+     * @param args List of arguments that can be provided to the program.
+     *             Will be ignored if supplied.
+     */
     public static void main(String[] args) {
        new Duke(DATA_FILE_PATH).run();
     }
 
     public void run() {
-        ui.printOut(GREETING);
+        ui.greet();
 
         while (true) {
             try {
@@ -38,7 +50,7 @@ public class Duke {
                 if (cmd.getCommandType() == CommandType.CMD_EXIT) {
                     break;
                 }
-            } catch (DukeException | IndexOutOfBoundsException | IOException ex) {
+            } catch (DukeException | IOException | NumberFormatException ex) {
                 ui.printOutSingle(ex.getMessage());
             }
         }
@@ -48,7 +60,7 @@ public class Duke {
      * System.out.println(getLogo()) prints the logo.
      * @return String that can be printed directly to print the logo.
      */
-    private static String getLogo() {
+    public static String getLogo() {
         return ("____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
                 + "| | | | | | | |/ / _ \\\n"
