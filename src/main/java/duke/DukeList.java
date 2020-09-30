@@ -5,6 +5,9 @@ import duke.Exceptions.ExceptionType;
 import duke.task.Task;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Represents the list of tasks used in the Duke program.
@@ -59,7 +62,7 @@ public class DukeList {
      * @throws DukeException if the list is empty.
      */
     public String[] listTasks() throws DukeException {
-        if (isEmpty()) {
+        if (tasks.isEmpty()) {
             throw new DukeException(ExceptionType.EMPTY_LIST);
         }
 
@@ -71,6 +74,19 @@ public class DukeList {
             result[i] = i + ". " + task.toString();
         }
         return result;
+    }
+
+    public String[] findTasks(String key) throws DukeException {
+        if (tasks.isEmpty()) {
+            throw new DukeException(ExceptionType.EMPTY_LIST);
+        }
+
+        Stream<Task> taskStream = tasks.stream();
+        ArrayList<String> foundTasks = (ArrayList<String>) taskStream.filter(t -> t.getName().contains(key))
+                .map(Task::toString)
+                .collect(toList());
+        foundTasks.add(0, "Found the following tasks in the list:");
+        return (String[]) foundTasks.toArray(new String[foundTasks.size()]);
     }
 
     /**
