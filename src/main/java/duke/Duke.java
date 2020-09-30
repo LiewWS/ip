@@ -10,7 +10,7 @@ import java.io.IOException;
  * Represents the main Duke program.
  */
 public class Duke {
-    private static final String DATA_FILE_PATH = "DukeData/duke_user_data.txt";
+    private static final String DATA_FILE_PATH = "data/list_data.txt";
     private Ui ui;
     private DukeList dukeList;
     private Storage store;

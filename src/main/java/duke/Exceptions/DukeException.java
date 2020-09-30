@@ -38,9 +38,6 @@ public class DukeException extends Exception {
         case BAD_INDEX:
             msg = "The index that you are looking for is unavailable.";
             break;
-        case ITEM_NOT_FOUND:
-            msg = "Search returned 0 results.";
-            break;
         default:
             // Should not happen. Only create exceptions with valid types.
             msg = "uhh this is bad.";

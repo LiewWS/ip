@@ -76,12 +76,6 @@ public class DukeList {
         return result;
     }
 
-    /**
-     * Searches the list for tasks with names that contain the key.
-     * @param key String that holds the search key.
-     * @return An array of Strings that represent the search results.
-     * @throws DukeException if the list is empty or there is no match.
-     */
     public String[] findTasks(String key) throws DukeException {
         if (tasks.isEmpty()) {
             throw new DukeException(ExceptionType.EMPTY_LIST);
@@ -91,11 +85,6 @@ public class DukeList {
         ArrayList<String> foundTasks = (ArrayList<String>) taskStream.filter(t -> t.getName().contains(key))
                 .map(Task::toString)
                 .collect(toList());
-
-        if (foundTasks.isEmpty()) {
-            throw new DukeException(ExceptionType.ITEM_NOT_FOUND);
-        }
-
         foundTasks.add(0, "Found the following tasks in the list:");
         return (String[]) foundTasks.toArray(new String[foundTasks.size()]);
     }
